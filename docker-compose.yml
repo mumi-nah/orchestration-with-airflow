@@ -1,0 +1,27 @@
+services:
+  airflow:
+    image: weather-image
+    container_name: weather-container
+    ports: 
+      - "8080:8080"
+    volumes: 
+      - ./dags:/opt/airflow/dags
+      - ./logs:/opt/airflow/logs
+      - ./plugins:/opt/airflow/plugins
+    command: airflow standalone
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+
+  # postgres:
+  #   image: postgres:15
+  #   container_name: postgres
+  #   environment:
+  #     POSTGRES_USER: airflow
+  #     POSTGRES_PASSWORD: airflow
+  #     POSTGRES_DB:  airflow_db
+  #       - AIRFLOW__CORE__SQL_ALCHEMY__CONN = postgresql+psycopg2://airflow:airflow@postgresql/airflow_db
+
+  #   volumes: 
+  #     - ./postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - '5432:5432'
