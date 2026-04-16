@@ -54,9 +54,12 @@ def transform_data(ti):
 def upload_to_gcs(ti):
     data = ti.xcom_pull(task_ids="transform_data")
     hook = GCSHook(gcp_conn_id="gcp_conn")
+    dt_string = ti.execution_date.strftime("%Y%m%d%H%M%S")
+    object_name = f"current_weather_data_london_{dt_string}.csv
+
     hook.upload(
         bucket_name="weathermap-data",
-        object_name="transformed_data.csv",
+        object_name=object_name,
         data=data.encode("utf-8"),
         mime_type="text/csv"
     )

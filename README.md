@@ -1,6 +1,6 @@
 # Weather Data Pipeline with Apache Airflow
 
-This project is a data pipeline built using **Apache Airflow**. It connects to the OpenWeatherMap API, extracts weather data, transforms it into a clean format, and uploads the results into **Google Cloud Storage (GCS)** as CSV files. The pipeline is designed to run daily and can be extended to feed into other systems like BigQuery for analysis.
+This project is a data pipeline built on **Docker** using **Apache Airflow**. It connects to the OpenWeatherMap API, extracts weather data, transforms it into a clean format, and uploads the results into **Google Cloud Storage (GCS)** as CSV files. The pipeline is designed to run daily and can be extended to feed into other systems like BigQuery for analysis.
 
 ---
 
@@ -20,7 +20,7 @@ This project is a data pipeline built using **Apache Airflow**. It connects to t
 
 4. **Upload to GCS**  
    Another `PythonOperator` uses the `GCSHook` to upload the CSV into a GCS bucket.  
-   The file name includes a timestamp to avoid overwriting and to keep a history of runs.
+   The file name includes a timestamp to avoid overwriting and to keep a history of runs (idempotency).
 
 ---
 
@@ -41,13 +41,19 @@ This project is a data pipeline built using **Apache Airflow**. It connects to t
 
 1. **Clone the repo**  
  ```bash
- git clone https://github.com/<your-username>/weather-dag.git
- cd weather-dag
+ git clone https://github.com/mumi-nah/orchestration-with-airflow.git
+ cd orchestration-with-airflow
 
 2. **Install dependencies** 
 Add the required packages to your Airflow image or environment.
 
-3. Configure Airflow connections
+3. **Add Requirements**
+In the requirements.txt file, enter:
+```
+apache-airflow-providers-http
+apache-airflow-providers-google```
+
+4. Configure Airflow connections
 
     In the Airflow UI, go to Admin → Connections.
 
@@ -67,10 +73,10 @@ Create a connection for GCP:
 
     Upload your service account JSON key.
 
-4. Place the DAG file  
+5. Place the DAG file  
 Copy weather_dag.py into your Airflow dags/ folder.
 
-5. Run Airflow  
+6. Run Airflow  
  Start the scheduler and webserver. Trigger the DAG manually or let it run daily.
 
  ## How to test locally
